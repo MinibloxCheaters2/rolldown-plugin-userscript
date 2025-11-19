@@ -1,4 +1,4 @@
-import { readFile } from 'fs/promises';
+import { readFile } from 'node:fs/promises';
 import MagicString from 'magic-string';
 import type { Plugin } from 'rollup';
 import { collectGrants, getMetadata } from './util';
@@ -79,6 +79,6 @@ function userscriptPlugin(
       };
     },
   };
-};
+}
 
 export default userscriptPlugin;

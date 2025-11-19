@@ -1,15 +1,17 @@
-import { parse as parseCode } from '@babel/parser';
+import { parse } from 'acorn';
 import type { AstNode } from 'rollup';
+import { describe, expect, it } from 'vitest';
 
-import {
-    collectGrants,
-    getMetadata
-} from '../src/util';
+import { collectGrants, getMetadata } from '../src/util';
 
 describe('collectGrants', () => {
   const parseCodeAsEstreeAst = (code: string) => {
-    const file = parseCode(code, { plugins: ['estree'] });
-    return file.program as AstNode;
+    // Acorn options to match Rollup's parsing environment
+    const ast = parse(code, {
+      ecmaVersion: 2020, // or a version appropriate for your project's target
+      sourceType: 'module',
+    });
+    return ast as unknown as AstNode;
   };
 
   it('should return an empty set on an empty input', () => {
