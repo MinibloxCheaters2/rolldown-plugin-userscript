@@ -1,64 +1,64 @@
 {
-  "name": "rollup-plugin-userscript",
-  "version": "1.1.0",
-  "description": "Rollup plugin for userscript",
-  "author": "Gerald <gera2ld@live.com>",
-  "license": "MIT",
-  "scripts": {
-    "ci": "pnpm run lint && pnpm run test",
-    "lint": "biome check",
-    "dev": "vite",
-    "clean": "rm -rf dist",
-    "build": "pnpm run ci && vite build",
-    "test": "vitest --run",
-    "prepublishOnly": "pnpm run build"
-  },
-  "type": "module",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "rolldown",
-    "userscript"
-  ],
-  "publishConfig": {
-    "access": "public",
-    "registry": "https://registry.npmjs.org/"
-  },
-  "dependencies": {
-    "@oxc-project/types": "^0.115.0",
-    "@rolldown/pluginutils": "^1.0.0-rc.6",
-    "@rollup/pluginutils": "^5.3.0",
-    "oxc-parser": "^0.115.0",
-    "oxc-walker": "^0.7.0",
-    "rolldown-string": "^0.2.1",
-    "vitest": "^4.0.18"
-  },
-  "devDependencies": {
-    "@types/node": "^25.3.2",
-    "biome": "^0.3.3",
-    "eslint-config-prettier": "^10.1.8",
-    "globals": "^17.3.0",
-    "husky": "^9.1.7",
-    "prettier": "^3.6.2",
-    "rolldown": "^1.0.0-rc.6",
-    "typescript": "^5.9.3",
-    "vite": "^7.2.4",
-    "vite-plugin-dts": "^4.5.4"
-  },
-  "peerDependencies": {
-    "rolldown": "^1.0.0-rc.6"
-  },
-  "repository": "git@github.com:violentmonkey/rollup-plugin-userscript.git",
-  "engines": {
-    "node": ">=18"
-  }
+	"name": "rollup-plugin-userscript",
+	"version": "1.1.0",
+	"description": "Rollup plugin for userscript",
+	"author": "Gerald <gera2ld@live.com>",
+	"license": "MIT",
+	"scripts": {
+		"ci": "pnpm run lint && pnpm run test",
+		"lint": "biome check",
+		"dev": "vite",
+		"clean": "rm -rf dist",
+		"build": "pnpm run ci && vite build",
+		"test": "vitest --run",
+		"prepublishOnly": "pnpm run build"
+	},
+	"type": "module",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"exports": {
+		".": {
+			"import": "./dist/index.js",
+			"types": "./dist/index.d.ts"
+		}
+	},
+	"files": [
+		"dist"
+	],
+	"keywords": [
+		"rolldown",
+		"userscript"
+	],
+	"publishConfig": {
+		"access": "public",
+		"registry": "https://registry.npmjs.org/"
+	},
+	"dependencies": {
+		"@oxc-project/types": "^0.115.0",
+		"@rolldown/pluginutils": "^1.0.0-rc.6",
+		"@rollup/pluginutils": "^5.3.0",
+		"oxc-parser": "^0.115.0",
+		"oxc-walker": "^0.7.0",
+		"rolldown-string": "^0.2.1",
+		"vitest": "^4.0.18"
+	},
+	"devDependencies": {
+		"@types/node": "^25.3.2",
+		"biome": "^0.3.3",
+		"eslint-config-prettier": "^10.1.8",
+		"globals": "^17.3.0",
+		"husky": "^9.1.7",
+		"prettier": "^3.6.2",
+		"rolldown": "^1.0.0-rc.6",
+		"typescript": "^5.9.3",
+		"vite": "^7.2.4",
+		"vite-plugin-dts": "^4.5.4"
+	},
+	"peerDependencies": {
+		"rolldown": "^1.0.0-rc.6"
+	},
+	"repository": "git@github.com:violentmonkey/rollup-plugin-userscript.git",
+	"engines": {
+		"node": ">=18"
+	}
 }

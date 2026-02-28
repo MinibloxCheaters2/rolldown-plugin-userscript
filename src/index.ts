@@ -1,90 +1,90 @@
-import { readFile } from 'node:fs/promises';
-import type { Plugin } from 'rolldown';
-import { collectGrants, getMetadata } from './util';
-import { rolldownString } from 'rolldown-string';
+import { readFile } from "node:fs/promises";
+import type { Plugin } from "rolldown";
+import { rolldownString } from "rolldown-string";
+import { collectGrants, getMetadata } from "./util";
 
-const suffix = '?userscript-metadata';
+const suffix = "?userscript-metadata";
 
 type TransformFn = (metadata: string) => string;
 
 export interface UserscriptMetaOptions {
-  transform?: TransformFn;
-  ignoreAutomaticGrants?: string[];
+	transform?: TransformFn;
+	ignoreAutomaticGrants?: string[];
 }
 
 function userscriptPlugin(transform?: TransformFn): Plugin;
 function userscriptPlugin(options?: UserscriptMetaOptions): Plugin;
 
 function userscriptPlugin(
-  transformOrUserOptions?: TransformFn | UserscriptMetaOptions
+	transformOrUserOptions?: TransformFn | UserscriptMetaOptions,
 ): Plugin {
-  const userOptions = typeof transformOrUserOptions === 'function'
-    ? { transform: transformOrUserOptions }
-    : transformOrUserOptions;
+	const userOptions =
+		typeof transformOrUserOptions === "function"
+			? { transform: transformOrUserOptions }
+			: transformOrUserOptions;
 
-  const metadataMap = new Map();
-  const grantMap = new Map();
-  return {
-    name: 'userscript-metadata',
-    async resolveId(source, importer, options) {
-      if (source.endsWith(suffix)) {
-        let { id } = await this.resolve(source, importer, options);
-        if (id.endsWith(suffix)) id = id.slice(0, -suffix.length);
-        metadataMap.set(importer, id);
-        return source;
-      }
-    },
-    load(id) {
-      if (id.endsWith(suffix)) {
-        return '';
-      }
-    },
-    transform: {
-      filter: {
-        id: /\.js$/
-      },
-      handler(code, id) {
-        const ast = this.parse(code);
-        const grantSetPerFile = collectGrants(ast);
-        grantMap.set(id, grantSetPerFile);
-      },
+	const metadataMap = new Map();
+	const grantMap = new Map();
+	return {
+		name: "userscript-metadata",
+		async resolveId(source, importer, options) {
+			if (source.endsWith(suffix)) {
+				let { id } = await this.resolve(source, importer, options);
+				if (id.endsWith(suffix)) id = id.slice(0, -suffix.length);
+				metadataMap.set(importer, id);
+				return source;
+			}
+		},
+		load(id) {
+			if (id.endsWith(suffix)) {
+				return "";
+			}
+		},
+		transform: {
+			filter: {
+				id: /\.js$/,
+			},
+			handler(code, id) {
+				const ast = this.parse(code);
+				const grantSetPerFile = collectGrants(ast);
+				grantMap.set(id, grantSetPerFile);
+			},
+		},
+		/**
+		 * Use `renderChunk` instead of `banner` to preserve the metadata after minimization.
+		 * Note that this plugin must be put after `@rollup/plugin-terser`.
+		 */
+		async renderChunk(code, chunk, _oo, meta) {
+			const metadataFile =
+				chunk.isEntry &&
+				[chunk.facadeModuleId, ...Object.keys(chunk.modules)]
+					.map((id) => metadataMap.get(id))
+					.find(Boolean);
+			if (!metadataFile) return;
+			let metadata = await readFile(metadataFile, "utf8");
+			const grantSet = new Set<string>();
+			for (const id of this.getModuleIds()) {
+				const grantSetPerFile = grantMap.get(id);
+				if (grantSetPerFile) {
+					for (const item of grantSetPerFile) {
+						if (userOptions.ignoreAutomaticGrants?.includes(item)) {
+							continue;
+						}
 
-    },
-    /**
-     * Use `renderChunk` instead of `banner` to preserve the metadata after minimization.
-     * Note that this plugin must be put after `@rollup/plugin-terser`.
-     */
-    async renderChunk(code, chunk, _oo, meta) {
-      const metadataFile =
-        chunk.isEntry &&
-        [chunk.facadeModuleId, ...Object.keys(chunk.modules)]
-          .map((id) => metadataMap.get(id))
-          .find(Boolean);
-      if (!metadataFile) return;
-      let metadata = await readFile(metadataFile, 'utf8');
-      const grantSet = new Set<string>();
-      for (const id of this.getModuleIds()) {
-        const grantSetPerFile = grantMap.get(id);
-        if (grantSetPerFile) {
-          for (const item of grantSetPerFile) {
-            if (userOptions.ignoreAutomaticGrants?.includes(item)) {
-              continue;
-            }
-
-            grantSet.add(item);
-          }
-        }
-      }
-      metadata = getMetadata(metadata, grantSet);
-      if (userOptions.transform) metadata = userOptions.transform(metadata);
-      const s = rolldownString(code, "proof?", meta);
-      s.prepend(`${metadata}\n\n`);
-      return {
-        code: s.toString(),
-        map: s.generateMap({ hires: 'boundary' }).toString(),
-      };
-    },
-  };
+						grantSet.add(item);
+					}
+				}
+			}
+			metadata = getMetadata(metadata, grantSet);
+			if (userOptions.transform) metadata = userOptions.transform(metadata);
+			const s = rolldownString(code, "proof?", meta);
+			s.prepend(`${metadata}\n\n`);
+			return {
+				code: s.toString(),
+				map: s.generateMap({ hires: "boundary" }).toString(),
+			};
+		},
+	};
 }
 
 export default userscriptPlugin;
