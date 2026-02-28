@@ -51,7 +51,9 @@ function getMemberExpressionFullNameRecursive(
 
 	switch (astNode.object.type) {
 		case "MemberExpression": {
-			const nameSoFar = getMemberExpressionFullNameRecursive(astNode.object);
+			const nameSoFar = getMemberExpressionFullNameRecursive(
+				astNode.object,
+			);
 			if (nameSoFar == null) {
 				return null;
 			}
@@ -107,7 +109,9 @@ export function getMetadata(
 	const maxKeyWidth = Math.max(...entries.map(([key]) => key.length));
 	return [
 		META_START,
-		...entries.map(([key, value]) => `// ${key.padEnd(maxKeyWidth)} ${value}`),
+		...entries.map(
+			([key, value]) => `// ${key.padEnd(maxKeyWidth)} ${value}`,
+		),
 		META_END,
 	].join("\n");
 }

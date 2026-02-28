@@ -76,7 +76,8 @@ function userscriptPlugin(
 				}
 			}
 			metadata = getMetadata(metadata, grantSet);
-			if (userOptions.transform) metadata = userOptions.transform(metadata);
+			if (userOptions.transform)
+				metadata = userOptions.transform(metadata);
 			const s = rolldownString(code, "proof?", meta);
 			s.prepend(`${metadata}\n\n`);
 			return {
