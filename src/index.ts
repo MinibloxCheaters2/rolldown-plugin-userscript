@@ -1,7 +1,10 @@
 import { readFile } from "node:fs/promises";
 import type { Plugin } from "rolldown";
+import { Context, defineParallelPluginImplementation, ParallelPluginImplementation } from "rolldown/parallelPlugin";
 import { rolldownString } from "rolldown-string";
-import { collectGrants, getMetadata } from "./util";
+import { collectGrants, getMetadata } from "./util.js";
+
+type MaybePromise<T> = T | Promise<T>;
 
 const suffix = "?userscript-metadata";
 
@@ -12,11 +15,10 @@ export interface UserscriptMetaOptions {
 	ignoreAutomaticGrants?: string[];
 }
 
-function userscriptPlugin(transform?: TransformFn): Plugin;
-function userscriptPlugin(options?: UserscriptMetaOptions): Plugin;
+type TransformOrUserOpt = TransformFn | UserscriptMetaOptions;
 
 function userscriptPlugin(
-	transformOrUserOptions?: TransformFn | UserscriptMetaOptions,
+	transformOrUserOptions?: TransformOrUserOpt,
 ): Plugin {
 	const userOptions =
 		typeof transformOrUserOptions === "function"
@@ -88,4 +90,9 @@ function userscriptPlugin(
 	};
 }
 
-export default userscriptPlugin;
+const parallel: (Options: TransformOrUserOpt, context: Context)
+	=> MaybePromise<ParallelPluginImplementation> = defineParallelPluginImplementation((opt: TransformOrUserOpt, ctx) => {
+		return userscriptPlugin(opt);
+	});
+
+export default parallel;

@@ -1,15 +1,15 @@
 import type { MemberExpression, Node } from "@oxc-project/types";
 import { type AttachedScope, attachScopes } from "@rollup/pluginutils";
 import { walk } from "oxc-walker";
-import isReference from "./is-reference";
+import isReference from "./is-reference.js";
 
 const META_START = "// ==UserScript==";
 const META_END = "// ==/UserScript==";
 const GRANTS_REGEXP = /^(unsafeWindow$|GM[._]\w+)/;
 
-export function collectGrants(ast: Node) {
+export function collectGrants(ast: Node): Set<string> {
 	let scope = attachScopes(ast, "scope");
-	const grantSetPerFile = new Set();
+	const grantSetPerFile = new Set<string>();
 	walk(ast, {
 		enter(node: Node & { scope: AttachedScope }, parent) {
 			if (node.scope) scope = node.scope;
@@ -72,7 +72,7 @@ function getMemberExpressionFullNameRecursive(
 export function getMetadata(
 	metaFileContent: string,
 	additionalGrantList: Set<string>,
-) {
+): string {
 	const lines = metaFileContent.split("\n").map((line) => line.trim());
 	const start = lines.indexOf(META_START);
 	const end = lines.indexOf(META_END);
