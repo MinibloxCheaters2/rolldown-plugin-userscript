@@ -6,7 +6,7 @@
   "license": "MIT",
   "scripts": {
     "ci": "pnpm run lint && pnpm run test",
-    "lint": "eslint",
+    "lint": "biome check",
     "dev": "vite",
     "clean": "rm -rf dist",
     "build": "pnpm run ci && vite build",
