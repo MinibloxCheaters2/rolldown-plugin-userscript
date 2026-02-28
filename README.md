@@ -1,4 +1,4 @@
-# rollup-plugin-userscript
+# rolldown-plugin-userscript
 
 ![NPM](https://img.shields.io/npm/v/rollup-plugin-userscript.svg)
 ![License](https://img.shields.io/npm/l/rollup-plugin-userscript.svg)
@@ -10,10 +10,10 @@ With this plugin, `@grant`s for [`GM_*` functions](https://violentmonkey.github.
 
 ## Usage
 
-Add the plugin to rollup.config.js:
+Add the plugin to rolldown.config.js:
 
 ```js
-import userscript from 'rollup-plugin-userscript';
+import userscript from 'rolldown-plugin-userscript';
 
 const plugins = [
   // ...

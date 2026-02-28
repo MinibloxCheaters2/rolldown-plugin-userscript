@@ -1,17 +1,17 @@
 {
-	"name": "rollup-plugin-userscript",
+	"name": "rolldown-plugin-userscript",
 	"version": "1.1.0",
-	"description": "Rollup plugin for userscript",
+	"description": "Rolldown plugin for UserScripts",
 	"author": "Gerald <gera2ld@live.com>",
 	"license": "MIT",
 	"scripts": {
-		"ci": "pnpm run lint && pnpm run test",
+		"ci": "bun run lint && bun run test",
 		"lint": "biome check",
-		"dev": "vite",
+		"dev": "tsdown --watch",
 		"clean": "rm -rf dist",
-		"build": "pnpm run ci && vite build",
+		"build": "tsdown",
 		"test": "vitest --run",
-		"prepublishOnly": "pnpm run build"
+		"prepublishOnly": "bun run build"
 	},
 	"type": "module",
 	"module": "./dist/index.js",
@@ -43,22 +43,20 @@
 		"vitest": "^4.0.18"
 	},
 	"devDependencies": {
-		"@types/node": "^25.3.2",
-		"biome": "^0.3.3",
-		"eslint-config-prettier": "^10.1.8",
+		"@types/node": "^25.3.3",
+		"@biomejs/biome": "^2.4.4",
 		"globals": "^17.3.0",
 		"husky": "^9.1.7",
-		"prettier": "^3.6.2",
 		"rolldown": "^1.0.0-rc.6",
 		"typescript": "^5.9.3",
-		"vite": "^7.2.4",
-		"vite-plugin-dts": "^4.5.4"
+		"tsdown": "0.21.0-beta.2"
 	},
 	"peerDependencies": {
 		"rolldown": "^1.0.0-rc.6"
 	},
 	"repository": "git@github.com:violentmonkey/rollup-plugin-userscript.git",
 	"engines": {
-		"node": ">=18"
+		"node": ">=18",
+		"bun": ">=1"
 	}
 }

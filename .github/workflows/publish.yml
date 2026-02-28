@@ -15,17 +15,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
-        name: Install pnpm
-        with:
-          version: 10
-          run_install: false
+      - uses: oven-sh/setup-bun@v2
+        name: Install bun
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 25
-          cache: 'pnpm'
+          cache: 'node'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: pnpm i && pnpm publish --no-git-checks
+      - run: bun i && bun publish --no-git-checks
