@@ -1,36 +1,30 @@
-import { parse } from 'acorn';
-import type { AstNode } from 'rollup';
 import { describe, expect, it } from 'vitest';
 
 import { collectGrants, getMetadata } from '../src/util';
+import { parse } from 'oxc-parser';
 
 describe('collectGrants', () => {
-  const parseCodeAsEstreeAst = (code: string) => {
-    // Acorn options to match Rollup's parsing environment
-    const ast = parse(code, {
-      ecmaVersion: 2020, // or a version appropriate for your project's target
-      sourceType: 'module',
-    });
-    return ast as unknown as AstNode;
+  const parseCode = async (code: string) => {
+    return (await parse("file", code)).program;
   };
 
-  it('should return an empty set on an empty input', () => {
-    const astNode = parseCodeAsEstreeAst(``);
+  it('should return an empty set on an empty input', async () => {
+    const astNode = await parseCode(``);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(0);
   });
 
-  it('should return only GM_dummyApi', () => {
-    const astNode = parseCodeAsEstreeAst(`GM_dummyApi`);
+  it('should return only GM_dummyApi', async () => {
+    const astNode = await parseCode(`GM_dummyApi`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(1);
     expect(result).toContain('GM_dummyApi');
   });
 
-  it('should ignore any scope-defined variables that look like GM APIs', () => {
-    const astNode = parseCodeAsEstreeAst(`
+  it('should ignore any scope-defined variables that look like GM APIs', async () => {
+    const astNode = await parseCode(`
       let GM_dummyApi;
       GM_dummyApi;
     `);
@@ -39,39 +33,39 @@ describe('collectGrants', () => {
     expect(result.size).toBe(0);
   });
 
-  it('should return only GM.dummyApi', () => {
-    const astNode = parseCodeAsEstreeAst(`GM.dummyApi`);
+  it('should return only GM.dummyApi', async () => {
+    const astNode = await parseCode(`GM.dummyApi`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(1);
     expect(result).toContain('GM.dummyApi');
   });
 
-  it('should return unsafeWindow when presented with just unsafeWindow', () => {
-    const astNode = parseCodeAsEstreeAst(`unsafeWindow`);
+  it('should return unsafeWindow when presented with just unsafeWindow', async () => {
+    const astNode = await parseCode(`unsafeWindow`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(1);
     expect(result).toContain('unsafeWindow');
   });
 
-  it('should return nothing unsafeWindow when presented with unsafeWindowButNotReally', () => {
-    const astNode = parseCodeAsEstreeAst(`unsafeWindowButNotReally`);
+  it('should return nothing unsafeWindow when presented with unsafeWindowButNotReally', async () => {
+    const astNode = await parseCode(`unsafeWindowButNotReally`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(0);
   });
 
-  it('should return unsafeWindow even when a subfield is accessed', () => {
-    const astNode = parseCodeAsEstreeAst(`unsafeWindow.anotherThing`);
+  it('should return unsafeWindow even when a subfield is accessed', async () => {
+    const astNode = await parseCode(`unsafeWindow.anotherThing`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(1);
     expect(result).toContain('unsafeWindow');
   });
 
-  it('should return unsafeWindow even when a subfield is accessed with object notation', () => {
-    const astNode = parseCodeAsEstreeAst(`unsafeWindow["anotherThing"]`);
+  it('should return unsafeWindow even when a subfield is accessed with object notation', async () => {
+    const astNode = await parseCode(`unsafeWindow["anotherThing"]`);
     const result = collectGrants(astNode);
 
     expect(result.size).toBe(1);

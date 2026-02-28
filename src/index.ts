@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
-import MagicString from 'magic-string';
-import type { Plugin } from 'rollup';
+import type { Plugin } from 'rolldown';
 import { collectGrants, getMetadata } from './util';
+import { rolldownString } from 'rolldown-string';
 
 const suffix = '?userscript-metadata';
 
@@ -39,16 +39,22 @@ function userscriptPlugin(
         return '';
       }
     },
-    transform(code, id) {
-      const ast = this.parse(code);
-      const grantSetPerFile = collectGrants(ast);
-      grantMap.set(id, grantSetPerFile);
+    transform: {
+      filter: {
+        id: /\.js$/
+      },
+      handler(code, id) {
+        const ast = this.parse(code);
+        const grantSetPerFile = collectGrants(ast);
+        grantMap.set(id, grantSetPerFile);
+      },
+
     },
     /**
      * Use `renderChunk` instead of `banner` to preserve the metadata after minimization.
      * Note that this plugin must be put after `@rollup/plugin-terser`.
      */
-    async renderChunk(code, chunk) {
+    async renderChunk(code, chunk, _oo, meta) {
       const metadataFile =
         chunk.isEntry &&
         [chunk.facadeModuleId, ...Object.keys(chunk.modules)]
@@ -71,7 +77,7 @@ function userscriptPlugin(
       }
       metadata = getMetadata(metadata, grantSet);
       if (userOptions.transform) metadata = userOptions.transform(metadata);
-      const s = new MagicString(code);
+      const s = rolldownString(code, "proof?", meta);
       s.prepend(`${metadata}\n\n`);
       return {
         code: s.toString(),

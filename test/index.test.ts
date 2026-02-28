@@ -6,4 +6,3 @@ describe('rollup-plugin-userscript', () => {
     expect(userscript().name).toBe('userscript-metadata');
   });
 });
-

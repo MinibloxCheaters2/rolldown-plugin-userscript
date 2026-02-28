@@ -1,18 +1,17 @@
 import { AttachedScope, attachScopes } from '@rollup/pluginutils';
-import { Node, walk } from 'estree-walker';
-import isReference from 'is-reference';
-import type { AstNode } from 'rollup';
-import type { MemberExpression } from 'estree';
+import { MemberExpression, Node } from '@oxc-project/types';
+import { walk } from 'oxc-walker';
+import isReference from './is-reference';
 
 const META_START = '// ==UserScript==';
 const META_END = '// ==/UserScript==';
 const GRANTS_REGEXP = /^(unsafeWindow$|GM[._]\w+)/;
 
-export function collectGrants(ast: AstNode) {
+export function collectGrants(ast: Node) {
   let scope = attachScopes(ast, 'scope');
   const grantSetPerFile = new Set();
-  walk(ast as Node, {
-    enter(node: Node & { scope: AttachedScope }, parent) {
+  walk(ast, {
+    enter(node: Node & { scope: AttachedScope }, parent, ctx) {
       if (node.scope) scope = node.scope;
 
       if (
