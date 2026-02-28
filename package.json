@@ -15,11 +15,11 @@
 	},
 	"type": "module",
 	"module": "./dist/index.mjs",
-	"types": "./dist/index.d.ts",
+	"types": "./dist/index.d.mts",
 	"exports": {
 		".": {
 			"import": "./dist/index.mjs",
-			"types": "./dist/index.d.ts"
+			"types": "./dist/index.d.mts"
 		}
 	},
 	"files": [
