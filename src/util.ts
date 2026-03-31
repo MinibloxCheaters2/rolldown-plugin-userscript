@@ -1,7 +1,7 @@
 import type { MemberExpression, Node } from "@oxc-project/types";
-import { type AttachedScope, attachScopes } from "@rollup/pluginutils";
 import { walk } from "oxc-walker";
 import isReference from "./is-reference.js";
+import attachScopes, { type AttachedScope } from "./scopes/attachScopes.js";
 
 const META_START = "// ==UserScript==";
 const META_END = "// ==/UserScript==";

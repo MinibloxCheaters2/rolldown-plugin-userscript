@@ -4,4 +4,7 @@ export default defineConfig({
 	dts: {
 		sourcemap: true,
 	},
+	deps: {
+		onlyBundle: []
+	}
 });
