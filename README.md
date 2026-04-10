@@ -1,8 +1,12 @@
 # rolldown-plugin-userscript
 
-![NPM](https://img.shields.io/npm/v/rollup-plugin-userscript.svg)
-![License](https://img.shields.io/npm/l/rollup-plugin-userscript.svg)
-![Downloads](https://img.shields.io/npm/dt/rollup-plugin-userscript.svg)
+> [!WARNING]
+> I broke the automatically setting `@grant`s part and this breaks in production due to Rolldown stripping the comments.
+> Probably just use Rollup instead of using this, rollup-plugin-userscript should work with Rolldown anyway.
+
+![NPM](https://img.shields.io/npm/v/@wq2/rolldown-plugin-userscript.svg)
+![License](https://img.shields.io/npm/l/@wq2/rolldown-plugin-userscript.svg)
+![Downloads](https://img.shields.io/npm/dt/@wq2/rolldown-plugin-userscript.svg)
 
 Automatically parse metadata and set `@grant`s.
 
