@@ -1,8 +1,8 @@
 {
 	"name": "rolldown-plugin-userscript",
-	"version": "1.1.0",
+	"version": "1.1.1",
 	"description": "Rolldown plugin for UserScripts",
-	"author": "Gerald <gera2ld@live.com>",
+	"author": "Seized and Desisted",
 	"license": "MIT",
 	"scripts": {
 		"ci": "bun run lint && bun run test",
@@ -34,8 +34,8 @@
 		"registry": "https://registry.npmjs.org/"
 	},
 	"dependencies": {
-		"@oxc-project/types": "^0.124.0",
-		"oxc-parser": "^0.124.0",
+		"@oxc-project/types": "^0.125.0",
+		"oxc-parser": "^0.125.0",
 		"oxc-walker": "^0.7.0",
 		"rolldown-string": "^0.3.0",
 		"vitest": "^4.1.4"
@@ -47,12 +47,12 @@
 		"husky": "^9.1.7",
 		"rolldown": "^1.0.0-rc.15",
 		"typescript": "^6.0.2",
-		"tsdown": "0.21.7"
+		"tsdown": "0.21.8"
 	},
 	"peerDependencies": {
 		"rolldown": "^1.0.0-rc.15"
 	},
-	"repository": "git@github.com:violentmonkey/rollup-plugin-userscript.git",
+	"repository": "git+https://github.com/MinibloxCheaters2/rolldown-plugin-userscript.git",
 	"engines": {
 		"node": ">=18",
 		"bun": ">=1"
