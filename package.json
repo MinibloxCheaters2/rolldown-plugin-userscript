@@ -52,7 +52,10 @@
 	"peerDependencies": {
 		"rolldown": "^1.0.0-rc.15"
 	},
-	"repository": "git+https://github.com/MinibloxCheaters2/rolldown-plugin-userscript.git",
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/MinibloxCheaters2/rolldown-plugin-userscript.git"
+	},
 	"engines": {
 		"node": ">=18",
 		"bun": ">=1"
