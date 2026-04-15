@@ -2,7 +2,8 @@
 
 > [!WARNING]
 > I broke the automatically setting `@grant`s part and this breaks in production due to Rolldown stripping the comments.
-> Probably just use Rollup instead of using this, rollup-plugin-userscript should work with Rolldown anyway.
+> Probably just use the Rollup one instead of using this, rollup-plugin-userscript should work with Rolldown anyway.
+> See [this wiki entry](https://github.com/MinibloxCheaters2/rolldown-plugin-userscript/wiki/Using-Minification-alongside-this) to fix production / minified builds
 
 ![NPM](https://img.shields.io/npm/v/@wq2/rolldown-plugin-userscript.svg)
 ![License](https://img.shields.io/npm/l/@wq2/rolldown-plugin-userscript.svg)
