@@ -34,7 +34,9 @@ function userscriptPlugin(transformOrUserOptions?: TransformOrUserOpt): Plugin {
 			name: "userscript-metadata",
 			async resolveId(source, importer, options) {
 				if (source.endsWith(suffix)) {
-					let { id } = await this.resolve(source, importer, options);
+					const resolved = await this.resolve(source, importer, options);
+					if (resolved === null) return source;
+					let { id } = resolved;
 					if (id.endsWith(suffix)) id = id.slice(0, -suffix.length);
 					metadataMap.set(importer, id);
 					return source;
@@ -55,9 +57,9 @@ function userscriptPlugin(transformOrUserOptions?: TransformOrUserOpt): Plugin {
 					grantMap.set(id, grantSetPerFile);
 				},
 			},
-			banner: {
-				order: "pre",
-				async handler(chunk) {
+			renderChunk: {
+				order: "post",
+				async handler(code, chunk) {
 					const metadataFile =
 						chunk.isEntry &&
 						[chunk.facadeModuleId, ...Object.keys(chunk.modules)]
@@ -72,7 +74,7 @@ function userscriptPlugin(transformOrUserOptions?: TransformOrUserOpt): Plugin {
 						if (grantSetPerFile) {
 							for (const item of grantSetPerFile) {
 								if (
-									userOptions.ignoreAutomaticGrants?.includes(
+									userOptions?.ignoreAutomaticGrants?.includes(
 										item,
 									)
 								) {
@@ -84,9 +86,9 @@ function userscriptPlugin(transformOrUserOptions?: TransformOrUserOpt): Plugin {
 						}
 					}
 					metadata = getMetadata(metadata, grantSet);
-					if (userOptions.transform)
+					if (userOptions?.transform)
 						metadata = userOptions.transform(metadata);
-					return metadata;
+					return `${metadata}\n${code}`;
 				},
 			},
 		},
