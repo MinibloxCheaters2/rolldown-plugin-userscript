@@ -25,4 +25,4 @@ jobs:
           cache: 'node'
           registry-url: 'https://registry.npmjs.org'
 
-      - run: bun i && bun publish --no-git-checks
+      - run: bun i && npm publish
