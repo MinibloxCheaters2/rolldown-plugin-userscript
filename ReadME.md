@@ -5,9 +5,9 @@
 > Probably just use the Rollup one instead of using this, rollup-plugin-userscript should work with Rolldown anyway.
 > See [this wiki entry](https://github.com/MinibloxCheaters2/rolldown-plugin-userscript/wiki/Using-Minification-alongside-this) to fix production / minified builds
 
-![NPM](https://img.shields.io/npm/v/@wq2/rolldown-plugin-userscript.svg)
-![License](https://img.shields.io/npm/l/@wq2/rolldown-plugin-userscript.svg)
-![Downloads](https://img.shields.io/npm/dt/@wq2/rolldown-plugin-userscript.svg)
+![NPM](https://img.shields.io/npm/v/rolldown-plugin-userscript.svg)
+![License](https://img.shields.io/npm/l/rolldown-plugin-userscript.svg)
+![Downloads](https://img.shields.io/npm/dt/rolldown-plugin-userscript.svg)
 
 Automatically parse metadata and set `@grant`s.
 
